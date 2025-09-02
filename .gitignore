@@ -1,0 +1,27 @@
+# Variables de entorno
+.env
+.env.*
+!.env.example
+
+# MySQL (aunque normalmente no se suben backups)
+*.sql
+*.myd
+*.myi
+*.frm
+
+# Logs
+*.log
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Django
+db.sqlite3
+migrations/*.py
+!migrations/__init__.py
+
+# IDE
+.vscode/
+.idea/
