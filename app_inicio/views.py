@@ -1,5 +1,7 @@
 from django.shortcuts import render
 
-# Create your views here.
-def inicio(request):
-    return render (request, 'inicio.html')
+def login_view(request):
+    return render(request, "app_inicio/login.html")
+
+def home_view(request):
+    return render(request, "app_inicio/home.html")
