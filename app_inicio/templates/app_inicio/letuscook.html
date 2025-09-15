@@ -18,7 +18,7 @@
         {% for receta in sugerencias %}
           <li class="list-group-item d-flex justify-content-between align-items-center">
             {{ receta.nombre }}
-            <a href="/recetas/?id={{ receta.id }}" class="btn btn-primary btn-sm">Ver receta</a>
+            <a href="{% url 'detalle_receta' receta.id %}" class="btn btn-primary btn-sm">Ver receta</a>
           </li>
         {% endfor %}
       </ul>

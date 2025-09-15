@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Receta
 from django.contrib.auth import authenticate, login
 from django.db.models import Q
@@ -41,7 +41,8 @@ def let_us_cook(request):
     return render(request, "app_inicio/letuscook.html", {"sugerencias": sugerencias})
 
 def recetas(request):
-    return render(request, "app_inicio/recetas.html")
+    recetas = Receta.objects.all()
+    return render(request, "app_inicio/recetas.html", {"recetas": recetas})
 
 def receta_search(request):
     query = request.GET.get("q")
@@ -49,3 +50,7 @@ def receta_search(request):
     if query:
         resultados = Receta.objects.filter(nombre__icontains=query)
     return render(request, "app_inicio/receta_search.html", {"resultados": resultados, "query": query})
+
+def detalle_receta(request, id):
+    receta = get_object_or_404(Receta, id=id)
+    return render(request, "app_inicio/detalle_receta.html", {"receta": receta})

@@ -1,0 +1,11 @@
+{% extends "app_inicio/base.html" %}
+{% block content %}
+<div class="container mt-5">
+  <h2>{{ receta.nombre }}</h2>
+  <p><strong>Descripción:</strong> {{ receta.descripcion }}</p>
+  <p><strong>Tiempo de preparación:</strong> {{ receta.tiempo_preparacion }} minutos</p>
+  <h4>Pasos:</h4>
+  <p>{{ receta.pasos }}</p>
+  <a href="{% url 'recetas' %}" class="btn btn-secondary mt-3">Volver a la lista</a>
+</div>
+{% endblock %}
