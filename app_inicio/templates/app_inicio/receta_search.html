@@ -1,0 +1,18 @@
+{% extends "app_inicio/base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Resultados para "{{ query }}"</h2>
+  {% if resultados %}
+    <ul class="list-group">
+      {% for receta in resultados %}
+        <li class="list-group-item">
+          <strong>{{ receta.nombre }}</strong><br>
+          <small>{{ receta.descripcion }}</small>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No se encontraron recetas.</p>
+  {% endif %}
+</div>
+{% endblock %}

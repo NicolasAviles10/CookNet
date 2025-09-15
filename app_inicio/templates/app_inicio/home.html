@@ -1,8 +1,26 @@
 {% extends "app_inicio/base.html" %}
-
-{% block title %}Inicio{% endblock %}
-
 {% block content %}
-<h2>Bienvenido a tu recetario</h2>
-<p>Aquí encontrarás recomendaciones personalizadas de recetas.</p>
+<div class="container mt-4">
+  <!-- Encabezado con texto a la izquierda y botón Let us cook a la derecha -->
+  <div class="row justify-content-between align-items-center mb-4">
+    <div class="col-auto">
+      <h2>Bienvenido a tu CookNet</h2>
+    </div>
+    <div class="col-auto">
+      <a href="{% url 'letuscook' %}" class="btn btn-success">Let us cook</a>
+    </div>
+  </div>
+
+  <!-- Buscador tipo Google -->
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <form method="get" action="{% url 'receta_search' %}">
+        <div class="input-group input-group-lg shadow">
+          <input type="text" name="q" class="form-control" placeholder="Buscar receta...">
+          <button class="btn btn-primary" type="submit">Buscar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 {% endblock %}

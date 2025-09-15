@@ -1,0 +1,28 @@
+{% extends "app_inicio/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow-lg p-4">
+    <h2 class="mb-4 text-center">Let us cook 🔥</h2>
+
+    <form method="post" class="mb-4">
+      {% csrf_token %}
+      <label for="ingredientes" class="form-label">Escribe los ingredientes que tienes:</label>
+      <textarea name="ingredientes" id="ingredientes" rows="3" class="form-control">{{ ingredientes }}</textarea>
+      <button type="submit" class="btn btn-success mt-3">Buscar recetas</button>
+    </form>
+
+    {% if sugerencias %}
+      <h4>Recetas sugeridas:</h4>
+      <ul class="list-group">
+        {% for receta in sugerencias %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ receta.nombre }}
+            <a href="/recetas/?id={{ receta.id }}" class="btn btn-primary btn-sm">Ver receta</a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

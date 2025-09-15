@@ -1,0 +1,15 @@
+{% extends "app_inicio/base.html" %}
+{% block content %}
+{% comment %} <div class="container mt-5">
+  <h2>Resultados de búsqueda: "{{ query }}"</h2>
+  <ul class="list-group mt-3">
+    {% for receta in resultados %}
+      <li class="list-group-item">
+        <a href="{% url 'detalle_receta' receta.id %}">{{ receta.nombre }}</a>
+      </li>
+    {% empty %}
+      <li class="list-group-item text-muted">No se encontraron resultados.</li>
+    {% endfor %}
+  </ul>
+</div> {% endcomment %}
+{% endblock %}
