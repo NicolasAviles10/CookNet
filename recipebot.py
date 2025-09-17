@@ -140,20 +140,50 @@ Example 3:
 """
 
 # Agente principal
-def recipebot_agent(user_ingredients):
+def recipebot_agent(user_ingredients, user=None):
     """
     RecipeBot Agent Function:
     - Busca recetas similares usando vector search (RAG)
+    - Prioriza favoritos del usuario
     - Construye prompt few-shot para Gemini
     - Llama Gemini 2.0 Flash para generar receta saludable en JSON
     """
+    # Recupera favoritos si hay usuario
+    favoritos_texts = []
+    if user is not None:
+        from app_inicio.models import UsuarioFavorito
+        favoritos = UsuarioFavorito.objects.filter(user=user).select_related('receta')
+        for fav in favoritos:
+            favoritos_texts.append(fav.receta.name)
     model, recipe_texts, embeddings = cargar_recetas_embeddings(user_ingredients)
     if not recipe_texts or embeddings.size == 0:
-            return "No se encontraron recetas relevantes para los ingredientes dados."
+        return "No se encontraron recetas relevantes para los ingredientes dados."
     retrieved = retrieve_similar_recipes(model, recipe_texts, embeddings, user_ingredients)
+    # Agrega favoritos al prompt si existen
+    favoritos_context = ""
+    if favoritos_texts:
+        favoritos_context = f"Recetas favoritas del usuario: {', '.join(favoritos_texts)}. Prioriza estas recetas en tu sugerencia si son relevantes."
     prompt = f"""
-Here's some examples {FEW_SHOTS_EXAMPLE} , now format {retrieved}. 
-make sure output should include fields name, ingredients, description, steps, estimated_time, healthy  
+{favoritos_context}
+Responde SIEMPRE en español. Eres un chef experto en cocina saludable y tu tarea es sugerir una receta clara, fácil y sabrosa usando los ingredientes del usuario y sus favoritos si existen.
+Si alguna de las recetas favoritas del usuario es relevante para los ingredientes, priorízala y explica la razón en el campo "razon".
+Formato de respuesta: JSON con los campos name, razon, ingredients, description, steps, estimated_time, healthy.
+El campo "razon" debe explicar brevemente por qué elegiste esa receta para el usuario (por ejemplo: por los ingredientes, por ser saludable, por ser favorita, etc).
+Ejemplo:
+{{
+    "name": "Tomato Pasta",
+    "razon": "Elegí esta receta porque el usuario tiene tomate y pasta, y es una opción saludable y fácil de preparar.",
+    "ingredients": ["tomate", "cebolla", "pasta"],
+    "description": "Una pasta sencilla y sin lácteos con salsa de tomate y cebolla.",
+    "steps": ["Hervir agua", "Agregar aceite, sal y pasta", "Picar tomates italianos y verduras", "Verificar que la pasta esté cocida y suave"],
+    "estimated_time": 25,
+    "healthy": true
+}}
+{FEW_SHOTS_EXAMPLE}
+Ahora, usando los siguientes ingredientes y contexto, genera una receta saludable y bien explicada en español:
+Ingredientes del usuario: {user_ingredients}
+Recetas similares encontradas: {retrieved}
+Recuerda: la respuesta debe ser solo el JSON, sin texto adicional, y todo en español.
 """
     client = genai.Client()
     response = client.models.generate_content(

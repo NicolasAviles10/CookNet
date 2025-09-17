@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from django.shortcuts import redirect
-from app_inicio import views  # o como se llame tu app
+from app_inicio import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -12,6 +12,5 @@ urlpatterns = [
     path("letuscook/", views.let_us_cook, name="letuscook"),
     path("recetas/search/", views.receta_search, name="receta_search"),
     path("recetas/<int:id>/", views.detalle_receta, name="detalle_receta"),
-
-
+    path("favoritos/", views.seleccionar_favoritos, name="seleccionar_favoritos"),
 ]
