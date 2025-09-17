@@ -40,6 +40,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from recipebot import recipebot_agent
 from django.core.paginator import Paginator
+from django.contrib.auth.forms import UserCreationForm
 
 def login_view(request):
     if request.method == "POST":
@@ -151,3 +152,15 @@ def detalle_receta(request, id):
             UsuarioFavorito.objects.get_or_create(user=request.user, receta=receta)
             es_favorito = True
     return render(request, "app_inicio/detalle_receta.html", {"receta": receta_traducida, "es_favorito": es_favorito, "pasos_list": pasos_list})
+
+def register_view(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()  # guarda el usuario en auth_user
+            username = form.cleaned_data.get("username")
+            messages.success(request, f"Usuario {username} creado con éxito. ¡Ya puedes iniciar sesión!")
+            return redirect("login")  # redirige al login
+    else:
+        form = UserCreationForm()
+    return render(request, "app_inicio/register.html", {"form": form})
