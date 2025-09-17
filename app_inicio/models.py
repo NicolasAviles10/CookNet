@@ -1,5 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.conf import settings
+
 
 # Create your models here.
 class Usuario(models.Model):
@@ -12,10 +14,29 @@ class Usuario(models.Model):
         return self.nombre
     
 class Receta(models.Model):
-    nombre = models.CharField(max_length=200)
-    descripcion = models.TextField()
-    pasos = models.TextField()
-    tiempo_preparacion = models.IntegerField(help_text="Tiempo en minutos")
+    name = models.CharField(max_length=255)
+    receta_id = models.IntegerField(unique=True)
+    minutes = models.IntegerField()
+    contributor_id = models.IntegerField()
+    submitted = models.DateField()
+    tags = models.TextField(blank=True, null=True)
+    nutrition = models.TextField(blank=True, null=True)
+    n_steps = models.IntegerField()
+    steps = models.TextField()
+    description = models.TextField(blank=True, null=True)
+    ingredients = models.TextField()
+    n_ingredients = models.IntegerField()
 
     def __str__(self):
-        return self.nombre
+        return self.name
+    
+class UsuarioFavorito(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    receta = models.ForeignKey(Receta, on_delete=models.CASCADE)
+    fecha = models.DateTimeField(auto_now_add=True)
+
+class RegistroComida(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    receta = models.ForeignKey(Receta, on_delete=models.CASCADE)
+    fecha = models.DateField()
+    comida = models.CharField(max_length=20, choices=[('desayuno', 'Desayuno'), ('almuerzo', 'Almuerzo'), ('cena', 'Cena')])

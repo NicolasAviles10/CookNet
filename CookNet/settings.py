@@ -30,6 +30,9 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost", "cooknet.pagekite.me"]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://cooknet.pagekite.me"
+]
 
 # Application definition
 

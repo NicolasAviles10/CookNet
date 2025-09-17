@@ -1,0 +1,48 @@
+{% extends "app_inicio/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow-lg p-4" style="max-width: 700px; margin: 0 auto;">
+    <h2 class="mb-4 text-center">Select your 5 favorite recipes</h2>
+    <div class="mb-4">
+      <h5>Your current favorites (max 5):</h5>
+      <ul class="list-group mb-3">
+        {% for receta in favoritos_recetas %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <a href="{% url 'detalle_receta' receta.id %}" class="fw-bold">{{ receta.name }}</a>
+            <form method="post" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit" name="remove_fav" value="{{ receta.id }}" class="btn btn-danger btn-sm">Remove</button>
+            </form>
+          </li>
+        {% empty %}
+          <li class="list-group-item text-muted">You have no favorites yet.</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="mb-3">
+      <form method="post" class="d-flex align-items-center">
+        {% csrf_token %}
+        <input type="text" name="search" value="{{ search_query|default:'' }}" placeholder="Search by name..." class="form-control me-2" style="max-width:300px;">
+        <button type="submit" class="btn btn-primary btn-sm">Search</button>
+      </form>
+    </div>
+    {% if search_results %}
+      <h6>Search results:</h6>
+      <ul class="list-group mb-3">
+        {% for receta in search_results %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <a href="{% url 'detalle_receta' receta.id %}" class="fw-bold">{{ receta.name }}</a>
+            <form method="post" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit" name="add_fav" value="{{ receta.id }}" class="btn btn-success btn-sm" {% if favoritos_max or receta.id in favoritos_ids %}disabled{% endif %}>
+                {% if receta.id in favoritos_ids %}Already a favorite{% else %}Add{% endif %}
+              </button>
+            </form>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

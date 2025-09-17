@@ -1,11 +1,39 @@
 {% extends "app_inicio/base.html" %}
 {% block content %}
-<div class="container mt-5">
-  <h2>{{ receta.nombre }}</h2>
-  <p><strong>Descripción:</strong> {{ receta.descripcion }}</p>
-  <p><strong>Tiempo de preparación:</strong> {{ receta.tiempo_preparacion }} minutos</p>
-  <h4>Pasos:</h4>
-  <p>{{ receta.pasos }}</p>
-  <a href="{% url 'recetas' %}" class="btn btn-secondary mt-3">Volver a la lista</a>
+<div class="container mt-4">
+    <div class="card shadow border-0">
+        <div class="card-header bg-success text-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="h4 mb-0"><i class="fas fa-book-open me-2"></i>{{ receta.name }}</h2>
+                <span class="badge bg-light text-success">{{ receta.minutes }} min</span>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="mb-4">
+                <h5 class="text-success"><i class="fas fa-align-left me-2"></i>Description</h5>
+                <p class="ps-3">{{ receta.description }}</p>
+            </div>
+            
+            <div>
+                <h5 class="text-success"><i class="fas fa-list-ol me-2"></i>Preparation steps</h5>
+                <ol class="ps-3">
+                    {% for paso in pasos_list %}
+                        {% if paso %}<li>{{ paso }}</li>{% endif %}
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
+        <div class="card-footer bg-light d-flex justify-content-between align-items-center">
+            <a href="{% url 'recetas' %}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i> Back to list
+            </a>
+            <form method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn {% if es_favorito %}btn-warning disabled{% else %}btn-outline-warning{% endif %}" title="Add to favorites" {% if es_favorito %}disabled{% endif %}>
+                    <i class="fas fa-star"></i> {% if es_favorito %}Favorite{% else %}Save as favorite{% endif %}
+                </button>
+            </form>
+        </div>
+    </div>
 </div>
 {% endblock %}

@@ -1,18 +1,56 @@
 {% extends "app_inicio/base.html" %}
 {% block content %}
 <div class="container mt-4">
-  <h2>Resultados para "{{ query }}"</h2>
-  {% if resultados %}
-    <ul class="list-group">
-      {% for receta in resultados %}
-        <li class="list-group-item">
-          <strong>{{ receta.nombre }}</strong><br>
-          <small>{{ receta.descripcion }}</small>
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No se encontraron recetas.</p>
-  {% endif %}
+    <div class="d-flex align-items-center mb-4">
+        <a href="{% url 'recetas' %}" class="btn btn-outline-secondary btn-sm me-2">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <h2 class="h4 mb-0">Results for "{{ query }}"</h2>
+    </div>
+    
+    {% if page_obj %}
+        <div class="list-group">
+            {% for receta in page_obj %}
+                <a href="{% url 'detalle_receta' receta.id %}" class="list-group-item list-group-item-action">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h5 class="mb-1 text-success">{{ receta.name }}</h5>
+                            <p class="mb-1 text-muted">{{ receta.description|truncatewords:20 }}</p>
+                        </div>
+                        <span class="badge bg-success rounded-pill">{{ receta.minutes }} min</span>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?q={{ query }}&page={{ page_obj.previous_page_number }}">
+                            <i class="fas fa-chevron-left me-1"></i> Previous
+                        </a>
+                    </li>
+                {% endif %}
+                <li class="page-item disabled">
+                    <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                </li>
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?q={{ query }}&page={{ page_obj.next_page_number }}">
+                            Next <i class="fas fa-chevron-right ms-1"></i>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-search fa-3x text-muted mb-3"></i>
+            <h3 class="text-muted">No recipes found</h3>
+            <p class="text-muted">Try other search terms</p>
+            <a href="{% url 'recetas' %}" class="btn btn-success mt-2">View all recipes</a>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}

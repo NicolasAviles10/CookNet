@@ -1,29 +1,45 @@
 {% extends "app_inicio/base.html" %}
 {% block content %}
 <div class="container mt-4">
-  <!-- Encabezado con texto a la izquierda y botón Let us cook a la derecha -->
-  <div class="row justify-content-between align-items-center mb-4">
-    <div class="col-auto">
-      <h2>Bienvenido a tu CookNet</h2>
-    </div>
-    <div class="col-auto">
-      <a href="{% url 'letuscook' %}" class="btn btn-success">Let us cook</a>
-    </div>
-  </div>
-
-  <!-- Buscador tipo Google -->
-  <div class="row justify-content-center">
-    <div class="col-md-8">
-      <form method="get" action="{% url 'receta_search' %}">
-        <div class="input-group input-group-lg shadow">
-          <input type="text" name="q" class="form-control" placeholder="Buscar receta...">
-          <button class="btn btn-primary" type="submit">Buscar</button>
+    <!-- Header with text left and Let us cook button right -->
+    <div class="row justify-content-between align-items-center mb-4">
+        <div class="col-md-8">
+            <h2 class="text-success"><i class="fas fa-heart text-danger me-2"></i>Welcome to your CookNet</h2>
+            <p class="text-muted">Discover and share the best recipes</p>
         </div>
-      </form>
+        <div class="col-md-4 text-md-end">
+            <a href="{% url 'letuscook' %}" class="btn btn-success btn-lg">
+                <i class="fas fa-fire me-2"></i>Let us cook
+            </a>
+        </div>
     </div>
-    <div class="col-md-8">
-      <a href="{% url 'recetas' %}" class="btn btn-success">Ver todas las recetas</a>
+
+    <!-- Google-like search -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-10">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h4 class="card-title text-center mb-4">Find your ideal recipe</h4>
+                    <form method="get" action="{% url 'receta_search' %}">
+                        <div class="input-group input-group-lg shadow-sm">
+                            <span class="input-group-text bg-white border-end-0">
+                                <i class="fas fa-search text-muted"></i>
+                            </span>
+                            <input type="text" name="q" class="form-control border-start-0" placeholder="Search recipe...">
+                            <button class="btn btn-success" type="submit">Search</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
+    
+    <div class="row justify-content-center mt-3">
+        <div class="col-md-10 text-center">
+            <a href="{% url 'recetas' %}" class="btn btn-outline-success">
+                <i class="fas fa-book me-1"></i> View all recipes
+            </a>
+        </div>
+    </div>
 </div>
 {% endblock %}
